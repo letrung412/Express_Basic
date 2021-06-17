@@ -1,25 +1,34 @@
-const express = require("express");
-const app = express();
-const PORT = 3000;
+async function main() {
+    const express = require("express");
+    const app = express();
+    const cors = require("cors");
+    const dotenv = require("dotenv").config();
+    const now = new Date().toISOString();
 
-//Middleware
-app.use(express.json());
+    //middleware
+    app.use(express.json());
+    app.use(cors());
+    app.disable("x-powered-by");
+    
+    //data
+    const database = require("./customers.json");
+    //import Controller
+    const NewAPICustomers = require("./src/customers/customers.api");
+    const Controller = require("./src/customers/customers.controller");
+    const Model = require("./src/customers/customers.model");
+    const CustomerModel = new Model(database);
+    const CustomerCTL = new Controller(CustomerModel);
+    
+    //domain api
+    app.use("/api/customers" , NewAPICustomers(CustomerCTL));
+    /****************************************************************************/
+    //server listen
+    console.log(`${now} - Server listen on ${process.env.PORT}`);
+    app.listen(process.env.PORT, (err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
+}
 
-//import data
-const customers = require("./customers.json")
-//API domain test Postman, Insominia : http://localhost:3000/api
-app.get("/api/get" , (req,res) => {
-    res.json("get method")
-})
-
-app.get("/api/list", (req,res) => {
-    res.json(customers)
-})
-
-//Listen
-app.listen(PORT, (err) => {
-    if (err) {
-        return console.log(err);
-    }
-    return console.log(`Server listen on ${PORT}`);
-})
+main().catch(err => console.log(err));
