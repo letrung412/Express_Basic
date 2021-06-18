@@ -1,5 +1,5 @@
 module.exports = class Model {
-    constructor (database){
+    constructor(database) {
         this.database = database;
     }
 
@@ -7,5 +7,9 @@ module.exports = class Model {
         const doc = this.database.find(customer => customer._id == id);
         return doc;
     }
+    async getAllCustomer() {
+        const list = this.database;
+        return list;
+    }
+   
 }
-

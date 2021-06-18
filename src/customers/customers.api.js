@@ -4,35 +4,54 @@ module.exports = function NewAPICustomers(CustomerCTL) {
     app.use(express.json());
     
     //function random && err
-    const Random = require("../../lib/random");
-    const random = new Random();
+    const Random = require("../../lib/random") ;
+    const random = new Random()  ;
 
- 
     //Read
-    app.get("/customers/get" , async(req,res) => {
-        const id = req.query.id;
+    app.get("/get" , async (req,res) => {
+      //  res.json("hello world !") ; 
+         const id  = req.query.id;
         const doc = await CustomerCTL.getCustomer(id);
-        res.json(doc);
-    })
+        res.json(doc); 
+    }) ; 
     
     //List
-    app.get("/customers/list" , async(req,res) => {
-        
-    })
+    app.get("/list" ,async (req,res) => {
+       const list =await CustomerCTL.listCustomer() ; 
+        res.json(list);
+    }) ; 
 
     //Create
-    app.post("/customers/create" , async(req,res) => {
-        
-    })
+    app.post("/create" , async(req,res) => {
+        const full_name = req.query.fullname ;
+        const birthday =req.query.birthday ; 
+        const gender =req.query.gender ;
+        const customer = {
+             _id : random.alphabet(12), 
+             full_name : full_name , 
+             birthday : birthday , 
+             gender : gender , 
+             code : random.alphabet(12) , 
+        };
+        const list =  await CustomerCTL.createCustomer(customer); 
+         res.json(list); 
+         //console.log(list)
+    }) ;
 
-    //Update
-    app.post("/customers/update" , async(req,res) => {
-       
-    })
+     //Update
+    app.post("/update" , async(req,res) => {
+       const id = req.query.id ; 
+       const name = req.query.name ; 
+       const data = req.query.data ; 
+       const CustomerUpdate = await CustomerCTL.updateCustomer(id,name,data); 
+       res.json(CustomerUpdate); 
+    });
 
     //delete
-    app.get("/customers/delete" , async(req,res) => {
-     
-    })
+    app.get("/delete" , async(req,res) => {
+       const id = req.query.id ;
+       let CustomerDelete = await CustomerCTL.deleteCustomer(id); 
+       res.json(CustomerDelete); 
+    }); 
     return app;
 }
