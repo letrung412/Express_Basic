@@ -4,21 +4,20 @@ async function main() {
     const cors = require("cors");
     const dotenv = require("dotenv").config();
     const now = new Date().toISOString();
-
     //middleware
+
     app.use(express.json());
     app.use(cors());
     app.disable("x-powered-by");
-    
     //data
     const database = require("./customers.json");
     //import Controller
-    const NewAPICustomers = require("./src/customers/customers.api");
+    const NewAPICustomers = require("./src/customers/customers.api")  ;
     const Controller = require("./src/customers/customers.controller");
     const Model = require("./src/customers/customers.model");
     const CustomerModel = new Model(database);
-    const CustomerCTL = new Controller(CustomerModel);
-    
+    const CustomerCTL   = new Controller(CustomerModel);
+
     //domain api
     app.use("/api/customers" , NewAPICustomers(CustomerCTL));
     /****************************************************************************/
