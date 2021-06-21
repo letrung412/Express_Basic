@@ -9,7 +9,6 @@ async function main() {
     app.use(express.json());
     app.use(cors());
     app.disable("x-powered-by");
-
     //data
     const database = require("./customers.json");
     //import Controller
@@ -17,7 +16,7 @@ async function main() {
     const Controller = require("./src/customers/customers.controller");
     const Model = require("./src/customers/customers.model");
     const CustomerModel = new Model(database);
-    const CustomerCTL   = new Controller(CustomerModel)   ;
+    const CustomerCTL   = new Controller(CustomerModel);
 
     //domain api
     app.use("/api/customers" , NewAPICustomers(CustomerCTL));
